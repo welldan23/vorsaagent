@@ -1,0 +1,12 @@
+{
+  "news": [
+    "https://feeds.bbci.co.uk/news/world/rss.xml",
+    "https://feeds.bbci.co.uk/news/technology/rss.xml"
+  ],
+  "anime": [
+    "https://www.animenewsnetwork.com/all/rss.xml?ann-edition=us"
+  ],
+  "crypto": [
+    "https://www.coindesk.com/arc/outboundfeeds/rss/"
+  ]
+}

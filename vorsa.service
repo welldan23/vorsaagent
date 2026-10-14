@@ -1,0 +1,18 @@
+[Unit]
+Description=VORSA Telegram Newsroom
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/vorsa_bot
+EnvironmentFile=/home/ubuntu/vorsa_bot/.env
+ExecStart=/home/ubuntu/vorsa_bot/.venv/bin/python /home/ubuntu/vorsa_bot/bot.py
+Restart=always
+RestartSec=10
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
