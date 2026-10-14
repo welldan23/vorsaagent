@@ -6,13 +6,14 @@ Telegram-first modular-agent MVP for **@vorsa.news**, **@vorsa.anime**, and **@v
 - `bot.py`: Telegram handlers (aiogram 3), RSS ingestion (HTTPX + feedparser), APScheduler 15-minute background scans, SQLite story/draft/approval storage, OpenAI-compatible API drafting, Pillow 1080x1350 previews. Still a modular monolith, **not** microservices.
 - `agent/router.py`: conservative Indonesian natural-language intent router; never approves via natural language.
 - `agent/ranker.py`: auditable heuristic story shortlist; **not** fact-checking.
+- `agent/textutil.py`: text cleaning, URL normalization, and Telegram message splitting (pure functions, unit-tested).
 - `agent/SOUL.md` / `agent/SKILL.md`: editorial policy and documented capabilities (human-readable; not dynamically loaded by LLM yet).
 - `brands/*.json`: brand identities for future per-brand templates.
 - `feeds.json`: editable RSS feed list.
 
 ## Install on Ubuntu 22.04+ / Python 3.10+
 ```bash
-sudo apt update && sudo apt install -y python3 python3-venv unzip
+sudo apt update && sudo apt install -y python3 python3-venv unzip fonts-dejavu-core
 unzip vorsa_agent_v1.zip
 cd vorsa_agent_v1
 python3 -m venv .venv
@@ -22,7 +23,7 @@ cp .env.example .env
 nano .env
 python bot.py
 ```
-Create Telegram bot token via @BotFather. Get numeric Telegram user ID from a trusted ID bot or Telegram API. Set `ADMIN_TELEGRAM_IDS` to your ID (comma-separated if more than one). Keep `.env` private and never commit it. `OPENAI_API_KEY` optional: without it, drafts are marked manual verification required.
+Create Telegram bot token via @BotFather. Get numeric Telegram user ID from a trusted ID bot or Telegram API. Set `ADMIN_TELEGRAM_IDS` to your ID (comma-separated if more than one). Keep `.env` private and never commit it. `OPENAI_API_KEY` optional: without it, drafts are marked manual verification required. Set `OPENAI_BASE_URL` to use another OpenAI-compatible provider. Previews need a TTF font: `fonts-dejavu-core` (installed above), a file in `assets/fonts/regular.ttf` + `bold.ttf`, or `FONT_PATH` / `FONT_BOLD_PATH`.
 
 ## Usage
 - `/start`, `/scan`, `/latest [news|anime|crypto]`, `/recommend [news|anime|crypto]`
@@ -46,7 +47,7 @@ python -m compileall -q .
 ```
 
 ## Running as service
-Edit `vorsa.service` paths/user for your server, then copy to `/etc/systemd/system/vorsa.service` and enable with `sudo systemctl daemon-reload && sudo systemctl enable --now vorsa`.
+`vorsa.service` assumes the project lives in `/home/ubuntu/vorsa_agent_v1` and runs as user `ubuntu`; edit paths/user if yours differ, then copy to `/etc/systemd/system/vorsa.service` and enable with `sudo systemctl daemon-reload && sudo systemctl enable --now vorsa`.
 
 ## Next production steps
 Separate newsroom and publishing modules, add URL and feed trust controls, source corroboration, media licensing workflow, Telegram inline approval buttons with version-bound confirmation, structured LLM tool calling with strict permissions, monitoring/backups, and official Meta API integration only after app review/permissions are ready.
