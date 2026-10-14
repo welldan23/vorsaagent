@@ -6,9 +6,9 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=ubuntu
-WorkingDirectory=/home/ubuntu/vorsa_bot
-EnvironmentFile=/home/ubuntu/vorsa_bot/.env
-ExecStart=/home/ubuntu/vorsa_bot/.venv/bin/python /home/ubuntu/vorsa_bot/bot.py
+WorkingDirectory=/home/ubuntu/vorsa_agent_v1
+EnvironmentFile=/home/ubuntu/vorsa_agent_v1/.env
+ExecStart=/home/ubuntu/vorsa_agent_v1/.venv/bin/python /home/ubuntu/vorsa_agent_v1/bot.py
 Restart=always
 RestartSec=10
 NoNewPrivileges=true

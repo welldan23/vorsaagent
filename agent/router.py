@@ -19,7 +19,9 @@ VERTICALS = {
 def route(text: str) -> Intent:
     t = text.lower().strip()
     vertical = next((k for k, words in VERTICALS.items() if any(re.search(r"(?<!\w)" + re.escape(w) + r"(?!\w)", t) for w in words)), "")
-    match = re.search(r"(?:#|(?:berita|draft|post|artikel|id)\s*)(\d{1,8})\b", t)
+    # "#12" always counts; "berita 12" only if the number isn't a duration ("berita 5 menit lalu").
+    match = re.search(r"#(\d{1,8})\b", t) or re.search(
+        r"\b(?:berita|draft|post|artikel|id)\s*(\d{1,8})\b(?!\s*(?:detik|menit|jam|hari|minggu|bulan|tahun)\b)", t)
     sid = int(match.group(1)) if match else None
     if re.search(r"\b(approve|setujui|publish|posting|terbitkan)\b", t):
         return Intent("approval_guidance", vertical, sid)  # Never approve via ambiguous natural language
